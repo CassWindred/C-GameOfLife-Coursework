@@ -54,9 +54,8 @@ void read_in_file(FILE *infile, struct universe *u) {
             } else if (currentchar == '*') {
                 cells[currentindex] = true;
             } else {
-                printf("Illegal character %c in input file, please input a correctly formatted file", currentchar);
-                printf("Closing Program");
-                exit(1);
+                fprintf(stderr,"Illegal character %c in input file, please input a correctly formatted file", currentchar);
+                exit(10);
             }
             currentindex++;
         }
@@ -84,11 +83,13 @@ void write_out_file(FILE *outfile, struct universe *u) {
                 currchar = '.';
             }
             if (fputc(currchar, outfile) == EOF) {
-                printf("Failed to write \"%c\" to file, output may be incorrect\n", currchar);
+                fprintf(stderr, "Failed to write \"%c\" to file, check permissions are correct\n", currchar);
+                exit(11);
             }
         }
         if (fputc('\n', outfile) == EOF) {
-            printf("Failed to write newline to file, output may be incorrect\n");
+            fprintf(stderr, "Failed to write newline to file, check permissions are correct\n");
+            exit(11);
         }
     }
 }

@@ -30,27 +30,24 @@ int main(int argc, char *argv[]) {
                 printf("Missing argument for option -%c\n", opt);
             case 'i':
                 if (optarg[0] == '-') {
-                    printf("Missing valid argument for option -i, please try again with valid argument...\n");
-                    printf("Ending Program...");
-                    exit(1);
+                    fprintf(stderr,"Missing valid argument for option -i, please try again with valid argument...\n");
+                    exit(7);
                 }
                 printf("Setting input file to %s...\n", optarg);
                 inputfilename = optarg;
                 break;
             case 'o':
                 if (optarg[0] == '-') {
-                    printf("Missing valid argument for option -o, please try again with valid argument...\n");
-                    printf("Ending Program...");
-                    exit(1);
+                    fprintf(stderr, "Missing valid argument for option -o, please try again with valid argument...\n");
+                    exit(8);
                 }
                 printf("Setting output file to %s...\n", optarg);
                 outputfilename = optarg;
                 break;
             case 'g':
                 if (optarg[0] == '-') {
-                    printf("Missing valid argument for option -g, please try again with valid argument...\n");
-                    printf("Ending Program...");
-                    exit(1);
+                    fprintf(stderr, "Missing valid argument for option -g, please try again with valid argument...\n");
+                    exit(9);
                 }
                 printf("Setting generation count to %s\n", optarg);
                 gencount = strtol(optarg, NULL, 10);
@@ -73,7 +70,7 @@ int main(int argc, char *argv[]) {
         printf("No output file specified, using STDOUT, the result will be printed below\n");
         outfile = stdout;
     } else if ((outfile = fopen(outputfilename, "w")) == NULL) { //Opens file and returns NULL if failed
-        printf("Error opening output file, please ensure the file you entered exists in same directory.\n");
+        fprintf(stderr, "Error opening output file, please ensure the file you entered exists in same directory.\n");
         // Program exits if file pointer returns NULL.
         exit(5);
     }
@@ -82,7 +79,7 @@ int main(int argc, char *argv[]) {
         printf("No input file specified, using STDIN, type your input below and use Ctrl+D when done\n");
         inpfile = stdin;
     } else if ((inpfile = fopen(inputfilename, "r")) == NULL) { //Opens file and returns NULL if failed
-        printf("Error opening input file, please ensure the file you entered exists in same directory.\n");
+        fprintf(stderr, "Error opening input file, please ensure the file you entered exists in same directory.\n");
         // Program exits if file pointer returns NULL.
         exit(6);
     }
