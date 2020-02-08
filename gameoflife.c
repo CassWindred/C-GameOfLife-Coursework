@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     FILE *inpfile;
     FILE *outfile;
 
-    bool usetorus = false;
+    bool (*will_be_alive_func)(struct universe *u, int column, int row) = &will_be_alive;
     bool printstats = false;
     int gencount = 5;
 
@@ -61,32 +61,43 @@ int main(int argc, char *argv[]) {
                 break;
             case 't':
                 printf("Using Torus configuration\n");
-                usetorus = true;
+                will_be_alive_func = &will_be_alive_torus;
                 break;
             default:
                 printf("-%c is not a recognised option0.\n", opt);
         }
     }
 
-    if ((inpfile = fopen("glider.txt", "r")) == NULL) {
-        printf("Error opening file, please ensure the file you entered exists in same directory.\n");
+
+    if (outputfilename == NULL) {
+        printf("No output file specified, using STDOUT, the result will be printed below\n");
+        outfile = stdout;
+    } else if ((outfile = fopen(outputfilename, "w")) == NULL) { //Opens file and returns NULL if failed
+        printf("Error opening output file, please ensure the file you entered exists in same directory.\n");
         // Program exits if file pointer returns NULL.
-        exit(1);
+        exit(5);
     }
 
-    printf("Owo whats this\n");
-    read_in_file(inpfile, &v);
-    write_out_file(stdout, &v);
+    if (inputfilename == NULL) {
+        printf("No input file specified, using STDIN, type your input below and use Ctrl+D when done\n");
+        inpfile = stdin;
+    } else if ((inpfile = fopen(inputfilename, "r")) == NULL) { //Opens file and returns NULL if failed
+        printf("Error opening input file, please ensure the file you entered exists in same directory.\n");
+        // Program exits if file pointer returns NULL.
+        exit(6);
+    }
 
-    evolve(&v, will_be_alive);
-    write_out_file(stdout, &v);
-    evolve(&v, will_be_alive);
-    write_out_file(stdout, &v);
-    evolve(&v, will_be_alive);
-    write_out_file(stdout, &v);
-    evolve(&v, will_be_alive);
-    write_out_file(stdout, &v);
-    evolve(&v, will_be_alive);
-    write_out_file(stdout, &v);
+
+    read_in_file(inpfile, &v);
+    write_out_file(outfile, &v);
+
+
+    for (int i = 0; i < gencount; ++i) {
+        evolve(&v, will_be_alive_func);
+
+    }
+
+    write_out_file(outfile, &v);
+
     return 0;
 }

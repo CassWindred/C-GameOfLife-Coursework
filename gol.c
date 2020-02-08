@@ -9,7 +9,7 @@
 //TODO: Work with terminal input
 //TODO: Properly handle inccorectly formatted input files and files without a newline at the end
 void read_in_file(FILE *infile, struct universe *u) {
-    printf("READING IN FILE!\n");
+    //printf("READING IN FILE!\n");
     bool widthfound = false;
     int width = 0;
     int height = 0;
