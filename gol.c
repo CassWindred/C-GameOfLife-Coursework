@@ -7,7 +7,7 @@
 #include"gol.h"
 
 
-//TODO: Properly handle inccorectly formatted input files
+//TODO: Properly handle inccorectly formatted input files and files without a newline at the end
 void read_in_file(FILE *infile, struct universe *u) {
     printf("READING IN FILE!\n");
     bool widthfound = false;

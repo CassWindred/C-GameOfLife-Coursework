@@ -19,21 +19,46 @@ int main(int argc, char *argv[]) {
 
 
     int opt;
-    while ((opt = getopt(argc, argv, ":if:lrx")) != -1)   {
+    while ((opt = getopt(argc, argv, ":i:o:g:st")) != -1)   {
         switch(opt) {
+            case '?':
+                printf("-%c is not a recognised option.\n", optopt);
+                break;
+            case ':':
+                printf("Missing argument for option -%c\n", opt);
             case 'i':
+                if (optarg[0]=='-') {
+                    printf("Missing valid argument for option -i, please try again with valid argument...\n");
+                    printf("Ending Program...");
+                    exit(1);
+                }
+                printf("Setting input file to %s...\n",optarg);
                 inputfilename = optarg;
                 break;
             case 'o':
+                if (optarg[0]=='-') {
+                    printf("Missing valid argument for option -o, please try again with valid argument...\n");
+                    printf("Ending Program...");
+                    exit(1);
+                }
+                printf("Setting output file to %s...\n", optarg);
                 outputfilename = optarg;
                 break;
             case 'g':
+                if (optarg[0]=='-') {
+                    printf("Missing valid argument for option -g, please try again with valid argument...\n");
+                    printf("Ending Program...");
+                    exit(1);
+                }
+                printf("Setting generation count to %s\n", optarg);
                 gencount = strtol(optarg, NULL, 10);
                 break;
             case 's':
+                printf("Printing statistics at end of run.\n");
                 printstats = true;
                 break;
             case 't':
+                printf("Using Torus configuration\n");
                 usetorus = true;
                 break;
             default:
