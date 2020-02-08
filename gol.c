@@ -10,6 +10,16 @@ typedef struct coordinate {
     int column, row;
 }coordinate;
 
+double percent_cells_alive(struct universe *u) {
+    double alivecells = 0;
+    double totalcells = (u->columns*u->rows);
+    for (int i = 0; i < (totalcells); ++i) {
+        if (u->cells[i] == true) {
+            alivecells++;
+        }
+    }
+    return (alivecells/totalcells)*100;
+}
 
 //TODO: Work with terminal input
 //TODO: Properly handle inccorectly formatted input files and files without a newline at the end
@@ -52,11 +62,12 @@ void read_in_file(FILE *infile, struct universe *u) {
         }
     }
 
-
     //printf("Width is %d, Height is %d", width, height);
     (*u).cells = cells;
     (*u).columns = width;
     (*u).rows = height;
+    (*u).generations = 1;
+    (*u).averagealive = percent_cells_alive(u);
 
 }
 
@@ -73,11 +84,11 @@ void write_out_file(FILE *outfile, struct universe *u) {
                 currchar = '.';
             }
             if (fputc(currchar, outfile) == EOF) {
-                printf("Failed to write \"%c\" to file, output may be incorrect", currchar);
+                printf("Failed to write \"%c\" to file, output may be incorrect\n", currchar);
             }
         }
         if (fputc('\n', outfile) == EOF) {
-            printf("Failed to write newline to file, output may be incorrect");
+            printf("Failed to write newline to file, output may be incorrect\n");
         }
     }
 }
@@ -191,7 +202,16 @@ void evolve(struct universe *u, int (*rule)(struct universe *u, int column, int 
         u->cells[i] = newpositions[i];
     }
 
+    u->generations++;
+    u->averagealive = (((u->generations-1.0)/u->generations)*u->averagealive) + ((1.0/u->generations)*percent_cells_alive(u));
+
     //printf("Evolution Complete, freeing newposition memory\n");
     //free(newpositions);
     //printf("Newposition freeing successful");
 };
+
+void print_statistics(struct universe *u) {
+    printf("%.3f%% of cells currently alive\n", percent_cells_alive(u));
+    printf("%.3f%% of cells alive on average\n", u->averagealive);
+}
+

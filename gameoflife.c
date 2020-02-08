@@ -99,5 +99,9 @@ int main(int argc, char *argv[]) {
 
     write_out_file(outfile, &v);
 
+    if (printstats == true) {
+        print_statistics(&v);
+    }
+
     return 0;
 }

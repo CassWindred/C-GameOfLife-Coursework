@@ -5,8 +5,9 @@ typedef int bool;
 
 struct universe {
 /*Put some appropriate things here*/
-    int columns, rows;
+    int columns, rows, generations;
     int *cells;
+    double averagealive;
 
 };
 
