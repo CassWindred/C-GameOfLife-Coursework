@@ -5,6 +5,7 @@
 
 
 int main(int argc, char *argv[]) {
+    //Initialise needed variables
     struct universe v;
 
     FILE *inpfile;
@@ -17,7 +18,7 @@ int main(int argc, char *argv[]) {
     char *inputfilename = "";
     char *outputfilename = "";
 
-
+    //Parse the input arguments
     int opt;
     while ((opt = getopt(argc, argv, ":i:o:g:st")) != -1)   {
         switch(opt) {
@@ -62,18 +63,24 @@ int main(int argc, char *argv[]) {
                 usetorus = true;
                 break;
             default:
-                printf("-%c is not a recognised option.", opt);
+                printf("-%c is not a recognised option0.\n", opt);
         }
     }
 
     if ((inpfile = fopen("glider.txt", "r")) == NULL) {
-        printf("Error opening file, please ensure the file you entered exists in same directory.");
+        printf("Error opening file, please ensure the file you entered exists in same directory.\n");
         // Program exits if file pointer returns NULL.
         exit(1);
     }
 
     printf("Owo whats this\n");
     read_in_file(inpfile, &v);
+
+    if (is_alive(&v, 3,1) == true) {
+        printf("Column %i, Row %i is alive\n", 3, 4);
+    } else {
+        printf("Column %i, Row %i is dead\n", 3, 4);
+    };
 
 /*
   evolve(&v,will_be_alive);
