@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include"gol.h"
 
+//TODO: Report problems to stderr
 
 int main(int argc, char *argv[]) {
     //Initialise needed variables
@@ -15,29 +16,29 @@ int main(int argc, char *argv[]) {
     bool printstats = false;
     int gencount = 5;
 
-    char *inputfilename = "";
-    char *outputfilename = "";
+    char *inputfilename = NULL;
+    char *outputfilename = NULL;
 
     //Parse the input arguments
     int opt;
-    while ((opt = getopt(argc, argv, ":i:o:g:st")) != -1)   {
-        switch(opt) {
+    while ((opt = getopt(argc, argv, ":i:o:g:st")) != -1) {
+        switch (opt) {
             case '?':
                 printf("-%c is not a recognised option.\n", optopt);
                 break;
             case ':':
                 printf("Missing argument for option -%c\n", opt);
             case 'i':
-                if (optarg[0]=='-') {
+                if (optarg[0] == '-') {
                     printf("Missing valid argument for option -i, please try again with valid argument...\n");
                     printf("Ending Program...");
                     exit(1);
                 }
-                printf("Setting input file to %s...\n",optarg);
+                printf("Setting input file to %s...\n", optarg);
                 inputfilename = optarg;
                 break;
             case 'o':
-                if (optarg[0]=='-') {
+                if (optarg[0] == '-') {
                     printf("Missing valid argument for option -o, please try again with valid argument...\n");
                     printf("Ending Program...");
                     exit(1);
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
                 outputfilename = optarg;
                 break;
             case 'g':
-                if (optarg[0]=='-') {
+                if (optarg[0] == '-') {
                     printf("Missing valid argument for option -g, please try again with valid argument...\n");
                     printf("Ending Program...");
                     exit(1);
@@ -75,19 +76,17 @@ int main(int argc, char *argv[]) {
 
     printf("Owo whats this\n");
     read_in_file(inpfile, &v);
+    write_out_file(stdout, &v);
 
-    if (is_alive(&v, 3,1) == true) {
-        printf("Column %i, Row %i is alive\n", 3, 4);
-    } else {
-        printf("Column %i, Row %i is dead\n", 3, 4);
-    };
-
-/*
-  evolve(&v,will_be_alive);
-  evolve(&v,will_be_alive);
-  evolve(&v,will_be_alive);
-  evolve(&v,will_be_alive);
-  evolve(&v,will_be_alive);
-  write_out_file(stdout,&v);*/
+    evolve(&v, will_be_alive);
+    write_out_file(stdout, &v);
+    evolve(&v, will_be_alive);
+    write_out_file(stdout, &v);
+    evolve(&v, will_be_alive);
+    write_out_file(stdout, &v);
+    evolve(&v, will_be_alive);
+    write_out_file(stdout, &v);
+    evolve(&v, will_be_alive);
+    write_out_file(stdout, &v);
     return 0;
 }
