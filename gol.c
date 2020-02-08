@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include"gol.h"
 
+typedef struct coordinate {
+    int column, row;
+}coordinate;
+
+
 //TODO: Work with terminal input
 //TODO: Properly handle inccorectly formatted input files and files without a newline at the end
 void read_in_file(FILE *infile, struct universe *u) {
@@ -55,7 +60,7 @@ void read_in_file(FILE *infile, struct universe *u) {
 
 }
 
-//TODO: Work with terminal output
+
 void write_out_file(FILE *outfile, struct universe *u) {
     printf("Writing to file...\n");
     for (int row = 0; row < u->rows; ++row) {

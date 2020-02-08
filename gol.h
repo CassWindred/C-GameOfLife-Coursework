@@ -10,9 +10,6 @@ struct universe {
 
 };
 
-typedef struct coordinate {
-    int column, row;
-}coordinate;
 
 /*Do not modify the next seven lines*/
 void read_in_file(FILE *infile, struct universe *u);
@@ -23,7 +20,5 @@ int will_be_alive_torus(struct universe *u,  int column, int row);
 void evolve(struct universe *u, int (*rule)(struct universe *u, int column, int row));
 void print_statistics(struct universe *u);
 /*You can modify after this line again*/
-
-coordinate* getneighbours(int column, int row);
 
 
