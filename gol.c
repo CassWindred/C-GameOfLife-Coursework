@@ -29,12 +29,12 @@ void read_in_file(FILE *infile, struct universe *u) {
     int cellsize = 1024; //The initial size of the cell array
     bool *cells = malloc(sizeof(bool) * cellsize); //Define an array with room for cellsize bools
     if (cells == NULL) {
-        perror("Fatal Malloc Error, Failed to allocate memory for cells");
+        perror("Fatal Malloc Error, Failed to allocate memory for cells\n");
         exit(20);
     }
     char currentchar = ' ';
     int currentindex = 0;
-    printf("Preparing to scan file\n");
+    //printf("Preparing to scan file\n");
 
     rewind(infile);
     while ((currentchar = getc(infile)) != EOF) {
@@ -51,7 +51,7 @@ void read_in_file(FILE *infile, struct universe *u) {
                 cellsize = cellsize * 2;
                 cells = realloc(cells, sizeof(bool) * cellsize);
                 if (cells == NULL) {
-                    perror("Fatal Realloc Error, Failed to re-allocate memory for cells");
+                    perror("Fatal Realloc Error, Failed to re-allocate memory for cells\n");
                     exit(22);
                 }
 
@@ -61,7 +61,7 @@ void read_in_file(FILE *infile, struct universe *u) {
             } else if (currentchar == '*') {
                 cells[currentindex] = true;
             } else {
-                fprintf(stderr,"Illegal character %c in input file, please input a correctly formatted file", currentchar);
+                fprintf(stderr,"Illegal character %c in input file, please input a correctly formatted file\n", currentchar);
                 exit(10);
             }
             currentindex++;
@@ -105,7 +105,7 @@ void write_out_file(FILE *outfile, struct universe *u) {
 coordinate *getneighbours(int column, int row) {
     coordinate *coordinates = malloc(sizeof(coordinate) * 8);
     if (coordinates == NULL) {
-        perror("Fatal Malloc Error, Failed to allocate memory for neighbour coordinates");
+        perror("Fatal Malloc Error, Failed to allocate memory for neighbour coordinates\n");
         exit(21);
     }
 

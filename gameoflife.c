@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
                     fprintf(stderr, "Missing valid argument for option -o, please try again with valid argument...\n");
                     exit(8);
                 }
-                printf("Setting output file to %s...\n", optarg);
+                //printf("Setting output file to %s...\n", optarg);
                 outputfilename = optarg;
                 break;
             case 'g':
@@ -51,25 +51,23 @@ int main(int argc, char *argv[]) {
                     fprintf(stderr, "Missing valid argument for option -g, please try again with valid argument...\n");
                     exit(9);
                 }
-                printf("Setting generation count to %s\n", optarg);
+                //printf("Setting generation count to %s\n", optarg);
                 gencount = strtol(optarg, NULL, 10);
                 break;
             case 's':
-                printf("Printing statistics at end of run.\n");
+                //printf("Printing statistics at end of run.\n");
                 printstats = true;
                 break;
             case 't':
-                printf("Using Torus configuration\n");
+                //printf("Using Torus configuration\n");
                 will_be_alive_func = &will_be_alive_torus;
                 break;
-            default:
-                printf("-%c is not a recognised option0.\n", opt);
         }
     }
 
 
     if (outputfilename == NULL) {
-        printf("No output file specified, using STDOUT, the result will be printed below\n");
+        //printf("No output file specified, using STDOUT, the result will be printed below\n");
         outfile = stdout;
     } else if ((outfile = fopen(outputfilename, "w")) == NULL) { //Opens file and returns NULL if failed
         perror("Error opening output file, please ensure the file you entered exists in same directory.\n");
@@ -78,7 +76,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (inputfilename == NULL) {
-        printf("No input file specified, using STDIN, type your input below and use Ctrl+D when done\n");
+        //printf("No input file specified, using STDIN, type your input below and use Ctrl+D when done\n");
         inpfile = stdin;
     } else if ((inpfile = fopen(inputfilename, "r")) == NULL) { //Opens file and returns NULL if failed
         perror("Error opening input file, please ensure the file you entered exists in same directory.\n");
@@ -89,8 +87,8 @@ int main(int argc, char *argv[]) {
 
     read_in_file(inpfile, &v);
 
-    printf("Input successful, input universe is as follows:\n");
-    write_out_file(stdout, &v);
+    //printf("Input successful, input universe is as follows:\n");
+    //write_out_file(stdout, &v);
 
 
     for (int i = 0; i < gencount; ++i) {
@@ -98,7 +96,7 @@ int main(int argc, char *argv[]) {
 
     }
 
-    printf("Simulation Successful, final universe is as follows:\n");
+    //printf("Simulation Successful, final universe is as follows:\n");
     write_out_file(outfile, &v);
 
     if (printstats == true) {
