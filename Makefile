@@ -6,7 +6,7 @@ DEPS = gol.h
 all : gameoflife libgol.so $(DEPS)
 
 gameoflife: libgol.so gameoflife.o
-	$(CC) $(CFLAGS) -L. -o gameoflife gameoflife.o -lgol
+	$(CC) $(CFLAGS) -L. -Wl,-rpath=\$$ORIGIN -o gameoflife gameoflife.o -lgol
 
 gameoflife.o: gameoflife.c $(DEPS)
 	$(CC) -c -fPIC $(CFLAGS)  gameoflife.c
@@ -17,5 +17,6 @@ gol.o: gol.c $(DEPS)
 libgol.so : gol.o
 	$(CC) gol.o $(CFLAGS) -shared -o libgol.so
 
-basicmake: gameoflife.c gol.c gol.h
-	$(CC) $(CFLAGS)
+.phony: clean
+clean:
+	rm -f gameoflife gameoflife.o gol.o libgol.so
