@@ -1,11 +1,9 @@
 #include<stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <getopt.h>
 #include"gol.h"
 
 
-
+//TODO: Use only C standard libraries
 int main(int argc, char *argv[]) {
     //Initialise needed variables
     struct universe v;
@@ -21,47 +19,50 @@ int main(int argc, char *argv[]) {
     char *outputfilename = NULL;
 
     //Parse the input arguments
-    int opt;
-    while ((opt = getopt(argc, argv, ":i:o:g:st")) != -1) {
-        switch (opt) {
-            case '?':
-                printf("-%c is not a recognised option.\n", optopt);
-                break;
-            case ':':
-                printf("Missing argument for option -%c, ignoring option.\n", opt);
-                break;
-            case 'i':
-                if (optarg[0] == '-') {
-                    fprintf(stderr,"Missing valid argument for option -i, please try again with valid argument...\n");
-                    exit(7);
-                }
-                printf("Setting input file to %s...\n", optarg);
-                inputfilename = optarg;
-                break;
-            case 'o':
-                if (optarg[0] == '-') {
-                    fprintf(stderr, "Missing valid argument for option -o, please try again with valid argument...\n");
-                    exit(8);
-                }
-                //printf("Setting output file to %s...\n", optarg);
-                outputfilename = optarg;
-                break;
-            case 'g':
-                if (optarg[0] == '-') {
-                    fprintf(stderr, "Missing valid argument for option -g, please try again with valid argument...\n");
-                    exit(9);
-                }
-                //printf("Setting generation count to %s\n", optarg);
-                gencount = strtol(optarg, NULL, 10);
-                break;
-            case 's':
-                //printf("Printing statistics at end of run.\n");
-                printstats = true;
-                break;
-            case 't':
-                //printf("Using Torus configuration\n");
-                will_be_alive_func = &will_be_alive_torus;
-                break;
+    for (int arg = 1; arg < argc; ++arg) {
+        if (argv[arg][0] == '-') {
+            switch (argv[arg][1]) {
+                case 'i':
+                    ++arg;
+                    if (arg>=argc || argv[arg][0] == '-') {
+                        fprintf(stderr,
+                                "No valid argument provided for -i option (note: arguments cannot start with \"-\")\n");
+                        exit(7);
+                    }
+                    printf("Setting input file to %s...\n", argv[arg]);
+                    inputfilename = argv[arg];
+                    break;
+                case 'o':
+                    ++arg;
+                    if (arg>=argc || argv[arg][0] == '-') {
+                        fprintf(stderr,
+                                "No valid argument provided for -o option (note: arguments cannot start with \"-\")\n");
+                        exit(8);
+                    }
+                    //printf("Setting output file to %s...\n", optarg);
+                    outputfilename = argv[arg];
+                    break;
+                case 'g':
+                    ++arg;
+                    if (arg>=argc || argv[arg][0] == '-') {
+                        fprintf(stderr,
+                                "No valid argument provided for -g option (note: arguments cannot start with \"-\")\n");
+                        exit(9);
+                    }
+                    //printf("Setting generation count to %s\n", optarg);
+                    gencount = strtol(argv[arg], NULL, 10);
+                    break;
+                case 's':
+                    //printf("Printing statistics at end of run.\n");
+                    printstats = true;
+                    break;
+                case 't':
+                    //printf("Using Torus configuration\n");
+                    will_be_alive_func = &will_be_alive_torus;
+                    break;
+            }
+        } else {
+            fprintf(stderr, "%s is not a valid switch, switches must start with a \"-\" character", argv[arg]);
         }
     }
 
