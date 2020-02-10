@@ -2,7 +2,6 @@
 // Created by TomCass on 07/02/2020.
 //
 #include<stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include"gol.h"
 
