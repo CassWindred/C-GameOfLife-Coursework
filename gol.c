@@ -30,6 +30,10 @@ void read_in_file(FILE *infile, struct universe *u) {
     int height = 0;
     int cellsize = 1024; //The initial size of the cell array
     bool *cells = malloc(sizeof(bool) * cellsize); //Define an array with room for cellsize bools
+    if (cells == NULL) {
+        perror("Fatal Malloc Error, Failed to allocate memory for cells");
+        exit(20);
+    }
     char currentchar = ' ';
     int currentindex = 0;
     printf("Preparing to scan file\n");
@@ -47,7 +51,12 @@ void read_in_file(FILE *infile, struct universe *u) {
             }
             if (currentindex >= cellsize) {
                 cellsize = cellsize * 2;
-                realloc(cells, sizeof(bool) * cellsize);
+                cells = realloc(cells, sizeof(bool) * cellsize);
+                if (cells == NULL) {
+                    perror("Fatal Realloc Error, Failed to re-allocate memory for cells");
+                    exit(22);
+                }
+
             }
             if (currentchar == '.') {
                 cells[currentindex] = false;
@@ -94,8 +103,13 @@ void write_out_file(FILE *outfile, struct universe *u) {
     }
 }
 
+//Return a pointer to a block of 8 coordinates that each represent a neighbour to the input column and row location
 coordinate *getneighbours(int column, int row) {
     coordinate *coordinates = malloc(sizeof(coordinate) * 8);
+    if (coordinates == NULL) {
+        perror("Fatal Malloc Error, Failed to allocate memory for neighbour coordinates");
+        exit(21);
+    }
 
     coordinates[0].column = column + 1;
     coordinates[0].row = row + 0;
@@ -209,7 +223,7 @@ void evolve(struct universe *u, int (*rule)(struct universe *u, int column, int 
     //printf("Evolution Complete, freeing newposition memory\n");
     //free(newpositions);
     //printf("Newposition freeing successful");
-};
+}
 
 void print_statistics(struct universe *u) {
     printf("%.3f%% of cells currently alive\n", percent_cells_alive(u));

@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
 #include"gol.h"
 
 //TODO: Report problems to stderr
@@ -70,7 +71,7 @@ int main(int argc, char *argv[]) {
         printf("No output file specified, using STDOUT, the result will be printed below\n");
         outfile = stdout;
     } else if ((outfile = fopen(outputfilename, "w")) == NULL) { //Opens file and returns NULL if failed
-        fprintf(stderr, "Error opening output file, please ensure the file you entered exists in same directory.\n");
+        perror("Error opening output file, please ensure the file you entered exists in same directory.\n");
         // Program exits if file pointer returns NULL.
         exit(5);
     }
@@ -79,7 +80,7 @@ int main(int argc, char *argv[]) {
         printf("No input file specified, using STDIN, type your input below and use Ctrl+D when done\n");
         inpfile = stdin;
     } else if ((inpfile = fopen(inputfilename, "r")) == NULL) { //Opens file and returns NULL if failed
-        fprintf(stderr, "Error opening input file, please ensure the file you entered exists in same directory.\n");
+        perror("Error opening input file, please ensure the file you entered exists in same directory.\n");
         // Program exits if file pointer returns NULL.
         exit(6);
     }
