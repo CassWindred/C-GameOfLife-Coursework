@@ -3,9 +3,10 @@ CFLAGS = -Wall -Wextra -pedantic -std=c11 -lm
 DEPS = gol.h
 
 .PHONY : all
-all : gol.o gameoflife.o libgol.so $(DEPS)
-	$(CC) $(CFLAGS) -L. -o gameoflife gameoflife.o -lgol
+all : gameoflife libgol.so $(DEPS)
 
+gameoflife: libgol.so gameoflife.o
+	$(CC) $(CFLAGS) -L. -o gameoflife gameoflife.o -lgol
 
 gameoflife.o: gameoflife.c $(DEPS)
 	$(CC) -c -fPIC $(CFLAGS)  gameoflife.c
