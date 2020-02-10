@@ -20,7 +20,6 @@ double percent_cells_alive(struct universe *u) {
     return (alivecells/totalcells)*100;
 }
 
-//TODO: Work with terminal input
 //TODO: Properly handle inccorectly formatted input files and files without a newline at the end
 void read_in_file(FILE *infile, struct universe *u) {
     //printf("READING IN FILE!\n");

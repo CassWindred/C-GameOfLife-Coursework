@@ -4,7 +4,7 @@
 #include <getopt.h>
 #include"gol.h"
 
-//TODO: Report problems to stderr
+
 
 int main(int argc, char *argv[]) {
     //Initialise needed variables
@@ -28,7 +28,8 @@ int main(int argc, char *argv[]) {
                 printf("-%c is not a recognised option.\n", optopt);
                 break;
             case ':':
-                printf("Missing argument for option -%c\n", opt);
+                printf("Missing argument for option -%c, ignoring option.\n", opt);
+                break;
             case 'i':
                 if (optarg[0] == '-') {
                     fprintf(stderr,"Missing valid argument for option -i, please try again with valid argument...\n");
