@@ -79,7 +79,7 @@ void read_in_file(FILE *infile, struct universe *u) {
 
 
 void write_out_file(FILE *outfile, struct universe *u) {
-    printf("Writing to file...\n");
+    //printf("Writing to file...\n");
     for (int row = 0; row < u->rows; ++row) {
         for (int column = 0; column < u->columns; ++column) {
             int pos = (row * u->columns) + column;

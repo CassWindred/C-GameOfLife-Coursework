@@ -88,7 +88,9 @@ int main(int argc, char *argv[]) {
 
 
     read_in_file(inpfile, &v);
-    write_out_file(outfile, &v);
+
+    printf("Input successful, input universe is as follows:\n");
+    write_out_file(stdout, &v);
 
 
     for (int i = 0; i < gencount; ++i) {
@@ -96,6 +98,7 @@ int main(int argc, char *argv[]) {
 
     }
 
+    printf("Simulation Successful, final universe is as follows:\n");
     write_out_file(outfile, &v);
 
     if (printstats == true) {
