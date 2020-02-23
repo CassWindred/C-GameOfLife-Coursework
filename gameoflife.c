@@ -3,7 +3,7 @@
 #include"gol.h"
 
 
-//TODO: Use only C standard libraries
+
 int main(int argc, char *argv[]) {
     //Initialise needed variables
     struct universe v;
@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
     char *outputfilename = NULL;
 
     //Parse the input arguments
+    //TODO: Error if an argument is entered more than once
     for (int arg = 1; arg < argc; ++arg) {
         if (argv[arg][0] == '-') {
             switch (argv[arg][1]) {
@@ -29,7 +30,7 @@ int main(int argc, char *argv[]) {
                                 "No valid argument provided for -i option (note: arguments cannot start with \"-\")\n");
                         exit(7);
                     }
-                    printf("Setting input file to %s...\n", argv[arg]);
+                    //printf("Setting input file to %s...\n", argv[arg]);
                     inputfilename = argv[arg];
                     break;
                 case 'o':
