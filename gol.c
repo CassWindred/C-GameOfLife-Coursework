@@ -51,10 +51,15 @@ void read_in_file(FILE *infile, struct universe *u) {
                 fprintf(stderr, "Double Empty Line Error: \n"
                                 "Line %d is the second empty line in a row, this is not a valid input, "
                                 "only the final line in a file may be empty.\n", currline);
-                exit(30);
+                exit(32);
             }
 
             if (widthfound == false) {
+                if (width>512) {
+                    fprintf(stderr, "Too Many Columns Error: \n"
+                                    "There cannot be more than 512 collumns in input.\n");
+                    exit(50);
+                }
                 width = linewidth;
                 widthfound = true;
             } else if (linewidth != width) {
@@ -89,15 +94,19 @@ void read_in_file(FILE *infile, struct universe *u) {
             } else if (currentchar == '*') {
                 cells[currentindex] = true;
             } else {
-                fprintf(stderr, "Illegal character %c in input file, please input a correctly formatted file\n",
+                fprintf(stderr, "Illegal character \"%c\" in input file, please input a correctly formatted file.\n",
                         currentchar);
                 exit(10);
             }
             currentindex++;
         }
     }
-
-    if (linewidth == 0) { //If line is empty it should not be included in the total height
+    if (currentindex == 0) {
+        fprintf(stderr, "Empty Input Error: \n"
+                        "Input cannot be empty, please enter a valid input.\n");
+        exit(31);
+    }
+    else if (linewidth == 0) { //If line is empty it should not be included in the total height
         height = currline - 1;
     } else if (linewidth == width) { //If line is the correct width it should be included in the total height
         height = currline;
@@ -178,7 +187,7 @@ coordinate *getneighbours(int column, int row) {
 int is_alive(struct universe *u, int column, int row) {
 
     if (column >= u->columns || column < 0 || row >= u->rows || row < 0) {
-        printf("Nonexistent cell position (%d, %d) requested, returning false", column, row);
+        //printf("Nonexistent cell position (%d, %d) requested, returning false", column, row);
         return false;
     }
 
