@@ -31,18 +31,22 @@ void read_in_file(FILE *infile, struct universe *u) {
         perror("Fatal Malloc Error, Failed to allocate memory for cells\n");
         exit(20);
     }
-    char currentchar = ' ';
-    int currline = 1;
-    int currentindex = 0;
-    int linewidth = 0;
-    bool linestarted = true;
+    char currentchar = ' '; //The most recently read character. Starts as a space cause you cant see them and thats spooky.
+    int currline = 1; //The current line (This one starts from 1, contraversial huh)
+    int currentindex = 0; //The index of the universe array we are currently at
+    int linewidth = 0; //Width of the current line
+    bool linestarted = true; //Used to identify if a new line has just been started to detect double newlines
     //printf("Preparing to scan file\n");
 
+
+    //Read In file
     rewind(infile);
-    while ((currentchar = getc(infile)) != EOF) {
-        if (currentchar == '\n') {
+    while ((currentchar = getc(infile)) != EOF) { //Identify each character and respond accordingly
+        if (currentchar == '\r') { //Ignore Carriage Returns (part of windows newline)
+            continue;
+        } else if (currentchar == '\n') { //On new line
             //printf("Maybe? New line?");
-            if (linestarted == true) {
+            if (linestarted == true) { //Check this newline doesnt come immediately after another
                 if (currentindex == 0) {
                     fprintf(stderr, "Empty First Line Error: \n"
                                     "The first line cannot be empty.\n");
@@ -54,33 +58,34 @@ void read_in_file(FILE *infile, struct universe *u) {
                 exit(32);
             }
 
-            if (widthfound == false) {
-                if (width>512) {
+            if (widthfound == false) { //If this is the first line, set the universe width to be the current lines width
+                if (width > 512) {
                     fprintf(stderr, "Too Many Columns Error: \n"
                                     "There cannot be more than 512 collumns in input.\n");
                     exit(50);
                 }
                 width = linewidth;
                 widthfound = true;
-            } else if (linewidth != width) {
-                    fprintf(stderr, "Incorrect Line Width in Input: \n"
-                                    "Line %d is %d characters long when width has been established to be %d characters long\n", currline,
-                            linewidth, width);
-                    exit(30);
-                }
+            } else if (linewidth != width) { //If width has already been set, but this line is a different width
+                fprintf(stderr, "Incorrect Line Width in Input: \n"
+                                "Line %d is %d characters long when width has been established to be %d characters long\n",
+                        currline,
+                        linewidth, width);
+                exit(30);
+            }
 
             linestarted = true;
             currline++;
             linewidth = 0;
 
-        } else {
+        } else { //If its not a newline or ignored character, it must be a real character!
             linestarted = false;
             linewidth++;
             if (widthfound == false) {
                 //printf("Increasing width!");
                 width++;
             }
-            if (currentindex >= cellsize) {
+            if (currentindex >= cellsize) { //Check that we arent going over the size allocate for the universe
                 cellsize = cellsize * 2;
                 cells = realloc(cells, sizeof(bool) * cellsize);
                 if (cells == NULL) {
@@ -96,6 +101,7 @@ void read_in_file(FILE *infile, struct universe *u) {
             } else {
                 fprintf(stderr, "Illegal character \"%c\" in input file, please input a correctly formatted file.\n",
                         currentchar);
+                printf("%c", currentchar);
                 exit(10);
             }
             currentindex++;
@@ -105,8 +111,7 @@ void read_in_file(FILE *infile, struct universe *u) {
         fprintf(stderr, "Empty Input Error: \n"
                         "Input cannot be empty, please enter a valid input.\n");
         exit(31);
-    }
-    else if (linewidth == 0) { //If line is empty it should not be included in the total height
+    } else if (linewidth == 0) { //If line is empty it should not be included in the total height
         height = currline - 1;
     } else if (linewidth == width) { //If line is the correct width it should be included in the total height
         height = currline;
@@ -157,6 +162,7 @@ coordinate *getneighbours(int column, int row) {
         exit(21);
     }
 
+    //Now this is what I like to call PR0GR4MM1NG
     coordinates[0].column = column + 1;
     coordinates[0].row = row + 0;
 
@@ -276,9 +282,7 @@ void evolve(struct universe *u, int (*rule)(struct universe *u, int column, int 
     u->averagealive = (((u->generations - 1.0) / u->generations) * u->averagealive) +
                       ((1.0 / u->generations) * percent_cells_alive(u));
 
-    //printf("Evolution Complete, freeing newposition memory\n");
-    //free(newpositions);
-    //printf("Newposition freeing successful");
+
 }
 
 void print_statistics(struct universe *u) {

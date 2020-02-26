@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <errno.h>
 #include"gol.h"
 
@@ -23,11 +24,10 @@ int main(int argc, char *argv[]) {
     char *endptr = NULL;
 
     //Parse the input arguments
-    //TODO: Error if an argument is entered more than once
     for (int arg = 1; arg < argc; ++arg) {
-        if (argv[arg][0] == '-') {
-            switch (argv[arg][1]) {
-                case 'i':
+        if (argv[arg][0] == '-') { //If the first part of an argument is "-", assume its a switch (negative numbers are not real and they cannot hurt me)
+            switch (argv[arg][1]) { //The character after the "-" will be the switch character, see which case it matches
+                case 'i': //INPUT CATE
                     ++arg;
                     if (arg >= argc || argv[arg][0] == '-') {
                         fprintf(stderr,
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
                                 "Conflicting input arguments given, please run with valid arguments.\n");
                         exit(10);
                     }
-                case 'o':
+                case 'o': //OUTPUT CASE
                     ++arg;
                     if (arg >= argc || argv[arg][0] == '-') {
                         fprintf(stderr,
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
                                 "Conflicting output arguments given, please run with valid arguments.\n");
                         exit(10);
                     }
-                case 'g':
+                case 'g': //SET GENERATIONS CASE
                     ++arg;
                     errno = 0;
 
@@ -68,11 +68,17 @@ int main(int argc, char *argv[]) {
                         exit(9);
                     }
                     gencounttemp = strtol(argv[arg], &endptr, 10);
-                    if ((errno != 0 && gencount == 0) || argv[arg] == endptr) {
-                        fprintf(stderr, "Failed to convert argument: %s into an integer for switch -g.\n"
-                                        "Please insert a valid argument for -g.\n", argv[arg]);
+                    if (errno != 0 || argv[arg] == endptr) { //Check for an error set by strtol
+                        if (gencounttemp == LONG_MIN || gencounttemp == LONG_MAX) {
+                            fprintf(stderr, "Failed to convert argument: %s into an integer for switch -g.\n"
+                                            "Input number out of range, please input a number between  0 and %ld.\n",
+                                    argv[arg], LONG_MAX);
+                        } else {
+                            fprintf(stderr, "Failed to convert argument: %s into an integer for switch -g.\n"
+                                            "Please insert a valid argument for -g.\n", argv[arg]);
+                        }
                         exit(15);
-                    } else if (*endptr != 0) {
+                    } else if (*endptr != 0) { //Check that there arent remaining characters in the string passed to strtol
                         fprintf(stderr, "Failed to convert argument: %s into an integer for switch -g.\n"
                                         "Please insert a valid integer.\n", argv[arg]);
                         exit(60);
@@ -87,21 +93,21 @@ int main(int argc, char *argv[]) {
                     }
                     break;
 
-                case 's':
+                case 's': //STATISTICS CASE
                     //printf("Printing statistics at end of run.\n");
                     printstats = true;
                     break;
-                case 't':
+                case 't': //TORUS CASE
                     //printf("Using Torus configuration\n");
-                    will_be_alive_func = &will_be_alive_torus;
+                    will_be_alive_func = &will_be_alive_torus; //Set the function to pass to the library to be the torus rather than the standard
                     break;
-                default:
+                default: //Oh No, something's cone wrong
                     fprintf(stderr,
-                            "Unrecognised Switch %s, please enter only valid options.\n", argv[arg]);
+                            "Unrecognised Switch \"%s\", please enter only valid options.\n", argv[arg]);
                     exit(10);
             }
         } else {
-            fprintf(stderr, "%s is not a valid switch, switches must start with a \"-\" character", argv[arg]);
+            fprintf(stderr, "%s is not a valid switch, switches must start with a \"-\" character and be two characters long", argv[arg]);
         }
     }
 
