@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
                     ++arg;
                     if (arg >= argc || argv[arg][0] == '-') {
                         fprintf(stderr,
-                                "No valid argument provided for -o option (note: arguments cannot start with \"-\")\n");
+                                "No valid argument provided for switch -o (note: arguments cannot start with \"-\")\n");
                         exit(8);
                     } else if (outputfilename == NULL || outputfilename == argv[arg]) {
                         //printf("Setting output file to %s...\n", optarg);
@@ -64,16 +64,16 @@ int main(int argc, char *argv[]) {
 
                     if (arg >= argc || argv[arg][0] == '-') {
                         fprintf(stderr,
-                                "No valid argument provided for -g option (note: arguments cannot start with \"-\")\n");
+                                "No valid argument provided for switch -g (note: arguments cannot start with \"-\")\n");
                         exit(9);
                     }
                     gencounttemp = strtol(argv[arg], &endptr, 10);
                     if ((errno != 0 && gencount == 0) || argv[arg] == endptr) {
-                        fprintf(stderr, "Failed to convert argument: %s into an integer for option -g.\n"
+                        fprintf(stderr, "Failed to convert argument: %s into an integer for switch -g.\n"
                                         "Please insert a valid argument for -g.\n", argv[arg]);
                         exit(15);
                     } else if (*endptr != 0) {
-                        fprintf(stderr, "Failed to convert argument: %s into an integer for option -g.\n"
+                        fprintf(stderr, "Failed to convert argument: %s into an integer for switch -g.\n"
                                         "Please insert a valid integer.\n", argv[arg]);
                         exit(60);
                     }
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
                     break;
                 default:
                     fprintf(stderr,
-                            "Unrecognised Option %s, please enter only valid options.\n", argv[arg]);
+                            "Unrecognised Switch %s, please enter only valid options.\n", argv[arg]);
                     exit(10);
             }
         } else {
