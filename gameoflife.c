@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
             switch (argv[arg][1]) { //The character after the "-" will be the switch character, see which case it matches
                 case 'i': //INPUT CATE
                     ++arg;
-                    if (arg >= argc || argv[arg][0] == '-') {
+                    if (arg >= argc) {
                         fprintf(stderr,
                                 "No valid argument provided for \"-i\" option (note: arguments cannot start with \"-\")\n");
                         exit(7);
@@ -44,9 +44,9 @@ int main(int argc, char *argv[]) {
                     }
                 case 'o': //OUTPUT CASE
                     ++arg;
-                    if (arg >= argc || argv[arg][0] == '-') {
+                    if (arg >= argc) {
                         fprintf(stderr,
-                                "No valid argument provided for switch -o (note: arguments cannot start with \"-\")\n");
+                                "No valid argument provided for switch -o \n");
                         exit(8);
                     } else if (outputfilename == NULL || outputfilename == argv[arg]) {
                         //printf("Setting output file to %s...\n", optarg);
@@ -107,7 +107,8 @@ int main(int argc, char *argv[]) {
                     exit(10);
             }
         } else {
-            fprintf(stderr, "%s is not a valid switch, switches must start with a \"-\" character and be two characters long", argv[arg]);
+            fprintf(stderr, "%s is not a valid switch, switches must start with a \"-\" character and be two characters long \n", argv[arg]);
+            exit(9);
         }
     }
 
